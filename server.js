@@ -1,12 +1,13 @@
-import express from 'express';
-import axios from 'axios';
-import bodyParser from 'body-parser';
-
-app.use(bodyParser.json());
+const express = require('express');
+const axios = require('axios');
+const bodyParser = require('body-parser');
 
 const app = express();
 const port = (process.env.PORT||3000);
 const url = 'https://www.randomuser.me/api/?format=json&results=1&nat=us';
+
+app.use(bodyParser.json());
+
 let storage = [];
 
 app.get('/users',(req, res) => {
