@@ -4,19 +4,19 @@ const bodyParser = require('body-parser');
 
 const app = express();
 const port = (process.env.PORT||3000);
-const url = 'https://www.randomuser.me/api/?format=json&results=1&nat=us';
+const url = 'https://www.randomuser.me/api/?results=10&nat=us';
 
 app.use(bodyParser.json());
 
 let storage = [];
 
-app.get('/users',(req, res) => {
-  axios.get(`${url}`)
-  .then((axiosRes) => {
-    storage = [...axiosRes.data.results];
-    res.status(200).json(storage);
-  })
-  .catch(err => res.status(400).send(err));
+app.get('/users',(res) => {
+    axios.get(`${url}`)
+    .then((axiosRes) => {
+      storage = storage.concat(axiosRes.data.results);
+      res.status(200).send(storage);
+    })
+    .catch((err) => {res.status(400).send(err)});
 });
 
 app.get('/users/firstname/:firstname',(req, res) => {
@@ -31,8 +31,12 @@ app.get('/users/firstname/:firstname',(req, res) => {
 });
 
 app.post('/users',(req, res) => {
-  storage.push(req.body);
-  res.status(201).send({'message':'User successfully created!'})
+  if(req.body!== undefined) {
+    storage.push(req.body);
+    res.status(201).json({'message':'User successfully created!'});
+  } else {
+    res.status(404).json({'message':'User not created!'});
+  };
 });
 
 app.listen(port,() => console.log(`kituApi is listening on port ${port}`));
