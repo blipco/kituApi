@@ -20,6 +20,6 @@ This endpoint allows the user to post their own user data to storage and that ne
  2. express : 4.16.4
 
  When given the chance I can explain all of my work and why I chose to create this API in the way that I did.\
- -Bobby Patterson
- blipco619@gmail.com
+ -Bobby Patterson\
+ blipco619@gmail.com\
  619-727-0822
