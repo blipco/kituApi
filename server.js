@@ -4,28 +4,30 @@ const bodyParser = require('body-parser');
 
 const app = express();
 const port = (process.env.PORT||3000);
-const url = 'https://www.randomuser.me/api/?results=10&nat=us';
+const url = 'https://www.randomuser.me/api/?nat=us';
 
 app.use(bodyParser.json());
 
 let storage = [];
 
-app.get('/users',(res) => {
-    axios.get(`${url}`)
+app.get('/users', async function(req, res) {
+  for(let i=0;i<10;i++){
+    await axios.get(`${url}`)
     .then((axiosRes) => {
       storage = storage.concat(axiosRes.data.results);
-      res.status(200).send(storage);
     })
     .catch((err) => {res.status(400).send(err)});
+  };
+  res.status(200).send(storage);
 });
 
-app.get('/users/firstname/:firstname',(req, res) => {
-  let firstName = req.params.firstname;
-  for(let i=0;i<storage.length;i++) {
-    if(storage[i].name.first==firstName) {
+app.get('/users/firstname/:firstname',(req, res, err) => {
+  const firstName = req.params.firstname;
+  for(let i=0;i<=storage.length;i++) {
+    if (storage[i].name.first == firstName) {
       res.status(200).send(storage[i]);
     }else {
-      res.status(404).json({'message': 'User not found!'});
+      console.error({'message': 'User not found! '});
     };
   };
 });
